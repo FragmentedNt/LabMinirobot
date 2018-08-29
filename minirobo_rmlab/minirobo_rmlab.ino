@@ -6,9 +6,9 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-	int inputchar = Serial.read();
-	if (inputchar != -1)
-	{
-		Serial.write(inputchar);
-	}
+	//int inputchar = Serial.read();
+	//if (inputchar != -1)
+	//{
+	//	Serial.write(inputchar);
+	//}
 }

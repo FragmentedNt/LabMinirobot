@@ -84,10 +84,12 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="MotorDriverTA8428K.h" />
     <ClInclude Include="pscon.h" />
     <ClInclude Include="__vm\.minirobo_rmlab.vsarduino.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="MotorDriverTA8428K.cpp" />
     <ClCompile Include="pscon.cpp" />
   </ItemGroup>
   <PropertyGroup>

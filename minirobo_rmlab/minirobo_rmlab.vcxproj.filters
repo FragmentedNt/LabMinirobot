@@ -24,9 +24,15 @@
     <ClInclude Include="pscon.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MotorDriverTA8428K.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pscon.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MotorDriverTA8428K.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

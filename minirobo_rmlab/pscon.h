@@ -13,138 +13,133 @@ class PsconClass
 {
  private:
 	 HardwareSerial *serial;
-	 const unsigned char packetSize = 10;
-	 const unsigned char datasize = 7;
-	 const unsigned char errorCountThreshold = 10;
+	 const byte packetSize = 10;
+	 const byte datasize = 7;
 	 const int bufsize = 64;
-	 char buf[64];
+	 byte buf[64];
 	 int readsize;
+
+	 const byte errorCountThreshold = 10;
+	 byte errorCount;
+	 byte error;
+
 	 typedef union {
-		 unsigned char Packet[10];
+		 byte Packet[10];
 		 struct {
 
-			 unsigned char Up : 1;		//packet[0]
-			 unsigned char Down : 1;
-			 unsigned char Right : 1;
-			 unsigned char Left : 1;
-			 unsigned char Triangle : 1;
-			 unsigned char Cross : 1;
-			 unsigned char Circle : 1;
-			 unsigned char Square : 1;
+			 byte Up : 1;		//packet[0]
+			 byte Down : 1;
+			 byte Right : 1;
+			 byte Left : 1;
+			 byte Triangle : 1;
+			 byte Cross : 1;
+			 byte Circle : 1;
+			 byte Square : 1;
 
-			 unsigned char L1 : 1;		//packet[1]
-			 unsigned char L2 : 1;
-			 unsigned char L3 : 1;
-			 unsigned char R1 : 1;
-			 unsigned char R2 : 1;
-			 unsigned char R3 : 1;
-			 unsigned char Start : 1;
-			 unsigned char Select : 1;
+			 byte L1 : 1;		//packet[1]
+			 byte L2 : 1;
+			 byte L3 : 1;
+			 byte R1 : 1;
+			 byte R2 : 1;
+			 byte R3 : 1;
+			 byte Start : 1;
+			 byte Select : 1;
 
-			 unsigned char Home : 1;	//packet[2]
-			 unsigned char fill : 7;
+			 byte Home : 1;	//packet[2]
+			 byte fill : 7;
 
-			 unsigned char Left_Y;	//packet[3]
-			 unsigned char Left_X;	//packet[4]
-			 unsigned char Right_Y;	//packet[5]
-			 unsigned char Right_X;	//packet[6]
-			 unsigned char Chk;	//packet[7]	
+			 byte Left_Y;	//packet[3]
+			 byte Left_X;	//packet[4]
+			 byte Right_Y;	//packet[5]
+			 byte Right_X;	//packet[6]
+			 byte Chk;	//packet[7]	
 
-			 unsigned char Fotter1; //packet[8]	0x7c |
-			 unsigned char Fotter2; //packet[9] 0x7c |
+			 byte Fotter1; //packet[8]	0x7c |
+			 byte Fotter2; //packet[9] 0x7c |
 									// パケットとのデータ共用部分ここまで
-
-
-			 double Degree_L;
-			 unsigned char Duty_L;
-
-			 double Degree_R;
-			 unsigned char Duty_R;
-
-			 unsigned char Error_Count;
-			 unsigned char Error;
 		 }Btn;
 
 		 void Clear()
 		 {
 			 memset(&Packet[0], 0x00, 3);
 			 memset(&Packet[3], 0x80, 4);
-			 Btn.Degree_L = Btn.Degree_R = 0;
-			 Btn.Duty_L = Btn.Duty_R = 0;
-			 Btn.Error = 1;
-			 Btn.Error_Count = 255;
 		 }
 	 }ControllerUnion;
 
-	 ControllerUnion Ps, PsOld;
+	 ControllerUnion ps, psOld;
 
-	 void Calcurate();
+	 void clearError();
  protected:
 
 
  public:
-	unsigned char Up()		{ return Ps.Btn.Up; }
-	unsigned char Down()	{ return Ps.Btn.Down; }
-	unsigned char Right()	{ return Ps.Btn.Right; }
-	unsigned char Left()	{ return Ps.Btn.Left; }
-	unsigned char Triangle(){ return Ps.Btn.Triangle; }
-	unsigned char Cross()	{ return Ps.Btn.Cross; }
-	unsigned char Circle()	{ return Ps.Btn.Circle; }
-	unsigned char Square()	{ return Ps.Btn.Square; }
-	unsigned char L1()		{ return Ps.Btn.L1; }
-	unsigned char L2()		{ return Ps.Btn.L2; }
-	unsigned char L3()		{ return Ps.Btn.L3; }
-	unsigned char R1()		{ return Ps.Btn.R1; }
-	unsigned char R2()		{ return Ps.Btn.R2; }
-	unsigned char R3()		{ return Ps.Btn.R3; }
-	unsigned char Start()	{ return Ps.Btn.Start; }
-	unsigned char Select()	{ return Ps.Btn.Select; }
-	unsigned char Home()	{ return Ps.Btn.Home; }
-	signed char Left_Y()	{ return Ps.Btn.Left_Y - 127; }
-	signed char Left_X()	{ return Ps.Btn.Left_X - 127; }
-	signed char Right_Y()	{ return Ps.Btn.Right_Y - 127; }
-	signed char Right_X()	{ return Ps.Btn.Right_X - 127; }
+	bool Up()		{ return ps.Btn.Up; }
+	bool Down()	{ return ps.Btn.Down; }
+	bool Right()	{ return ps.Btn.Right; }
+	bool Left()	{ return ps.Btn.Left; }
+	bool Triangle(){ return ps.Btn.Triangle; }
+	bool Cross()	{ return ps.Btn.Cross; }
+	bool Circle()	{ return ps.Btn.Circle; }
+	bool Square()	{ return ps.Btn.Square; }
+	bool L1()		{ return ps.Btn.L1; }
+	bool L2()		{ return ps.Btn.L2; }
+	bool L3()		{ return ps.Btn.L3; }
+	bool R1()		{ return ps.Btn.R1; }
+	bool R2()		{ return ps.Btn.R2; }
+	bool R3()		{ return ps.Btn.R3; }
+	bool Start()	{ return ps.Btn.Start; }
+	bool Select()	{ return ps.Btn.Select; }
+	bool Home()	{ return ps.Btn.Home; }
+	char Left_Y()	{ return ps.Btn.Left_Y - 127; }
+	char Left_X()	{ return ps.Btn.Left_X - 127; }
+	char Right_Y()	{ return ps.Btn.Right_Y - 127; }
+	char Right_X()	{ return ps.Btn.Right_X - 127; }
 	
-	unsigned char Rise_Up() { return Ps.Btn.Up && !PsOld.Btn.Up; }
-	unsigned char Rise_Down() { return Ps.Btn.Down && !PsOld.Btn.Down; }
-	unsigned char Rise_Right() { return Ps.Btn.Right && !PsOld.Btn.Right; }
-	unsigned char Rise_Left() { return Ps.Btn.Left && !PsOld.Btn.Left; }
-	unsigned char Rise_Triangle() { return Ps.Btn.Triangle && !PsOld.Btn.Triangle; }
-	unsigned char Rise_Cross() { return Ps.Btn.Cross && !PsOld.Btn.Cross; }
-	unsigned char Rise_Circle() { return Ps.Btn.Circle && !PsOld.Btn.Circle; }
-	unsigned char Rise_Square() { return Ps.Btn.Square && !PsOld.Btn.Square; }
-	unsigned char Rise_L1() { return Ps.Btn.L1 && !PsOld.Btn.L1; }
-	unsigned char Rise_L2() { return Ps.Btn.L2 && !PsOld.Btn.L2; }
-	unsigned char Rise_L3() { return Ps.Btn.L3 && !PsOld.Btn.L3; }
-	unsigned char Rise_R1() { return Ps.Btn.R1 && !PsOld.Btn.R1; }
-	unsigned char Rise_R2() { return Ps.Btn.R2 && !PsOld.Btn.R2; }
-	unsigned char Rise_R3() { return Ps.Btn.R3 && !PsOld.Btn.R3; }
-	unsigned char Rise_Start() { return Ps.Btn.Start && !PsOld.Btn.Start; }
-	unsigned char Rise_Select() { return Ps.Btn.Select && !PsOld.Btn.Select; }
-	unsigned char Rise_Home() { return Ps.Btn.Home && !PsOld.Btn.Home; }
+	float D_Left_Y()	{ return (float)(ps.Btn.Left_Y  - 127) / 127; }
+	float D_Left_X()	{ return (float)(ps.Btn.Left_X  - 127) / 127; }
+	float D_Right_Y()	{ return (float)(ps.Btn.Right_Y - 127) / 127; }
+	float D_Right_X()	{ return (float)(ps.Btn.Right_X - 127) / 127; }
 
-	unsigned char Fall_Up() { return !Ps.Btn.Up && PsOld.Btn.Up; }
-	unsigned char Fall_Down() { return !Ps.Btn.Down && PsOld.Btn.Down; }
-	unsigned char Fall_Right() { return !Ps.Btn.Right && PsOld.Btn.Right; }
-	unsigned char Fall_Left() { return !Ps.Btn.Left && PsOld.Btn.Left; }
-	unsigned char Fall_Triangle() { return !Ps.Btn.Triangle && PsOld.Btn.Triangle; }
-	unsigned char Fall_Cross() { return !Ps.Btn.Cross && PsOld.Btn.Cross; }
-	unsigned char Fall_Circle() { return !Ps.Btn.Circle && PsOld.Btn.Circle; }
-	unsigned char Fall_Square() { return !Ps.Btn.Square && PsOld.Btn.Square; }
-	unsigned char Fall_L1() { return !Ps.Btn.L1 && PsOld.Btn.L1; }
-	unsigned char Fall_L2() { return !Ps.Btn.L2 && PsOld.Btn.L2; }
-	unsigned char Fall_L3() { return !Ps.Btn.L3 && PsOld.Btn.L3; }
-	unsigned char Fall_R1() { return !Ps.Btn.R1 && PsOld.Btn.R1; }
-	unsigned char Fall_R2() { return !Ps.Btn.R2 && PsOld.Btn.R2; }
-	unsigned char Fall_R3() { return !Ps.Btn.R3 && PsOld.Btn.R3; }
-	unsigned char Fall_Start() { return !Ps.Btn.Start && PsOld.Btn.Start; }
-	unsigned char Fall_Select() { return !Ps.Btn.Select && PsOld.Btn.Select; }
-	unsigned char Fall_Home() { return !Ps.Btn.Home && PsOld.Btn.Home; }
+	bool Rise_Up() { return ps.Btn.Up && !psOld.Btn.Up; }
+	bool Rise_Down() { return ps.Btn.Down && !psOld.Btn.Down; }
+	bool Rise_Right() { return ps.Btn.Right && !psOld.Btn.Right; }
+	bool Rise_Left() { return ps.Btn.Left && !psOld.Btn.Left; }
+	bool Rise_Triangle() { return ps.Btn.Triangle && !psOld.Btn.Triangle; }
+	bool Rise_Cross() { return ps.Btn.Cross && !psOld.Btn.Cross; }
+	bool Rise_Circle() { return ps.Btn.Circle && !psOld.Btn.Circle; }
+	bool Rise_Square() { return ps.Btn.Square && !psOld.Btn.Square; }
+	bool Rise_L1() { return ps.Btn.L1 && !psOld.Btn.L1; }
+	bool Rise_L2() { return ps.Btn.L2 && !psOld.Btn.L2; }
+	bool Rise_L3() { return ps.Btn.L3 && !psOld.Btn.L3; }
+	bool Rise_R1() { return ps.Btn.R1 && !psOld.Btn.R1; }
+	bool Rise_R2() { return ps.Btn.R2 && !psOld.Btn.R2; }
+	bool Rise_R3() { return ps.Btn.R3 && !psOld.Btn.R3; }
+	bool Rise_Start() { return ps.Btn.Start && !psOld.Btn.Start; }
+	bool Rise_Select() { return ps.Btn.Select && !psOld.Btn.Select; }
+	bool Rise_Home() { return ps.Btn.Home && !psOld.Btn.Home; }
 
-	void Init(HardwareSerial hs);
-	void GetData();
+	bool Fall_Up() { return !ps.Btn.Up && psOld.Btn.Up; }
+	bool Fall_Down() { return !ps.Btn.Down && psOld.Btn.Down; }
+	bool Fall_Right() { return !ps.Btn.Right && psOld.Btn.Right; }
+	bool Fall_Left() { return !ps.Btn.Left && psOld.Btn.Left; }
+	bool Fall_Triangle() { return !ps.Btn.Triangle && psOld.Btn.Triangle; }
+	bool Fall_Cross() { return !ps.Btn.Cross && psOld.Btn.Cross; }
+	bool Fall_Circle() { return !ps.Btn.Circle && psOld.Btn.Circle; }
+	bool Fall_Square() { return !ps.Btn.Square && psOld.Btn.Square; }
+	bool Fall_L1() { return !ps.Btn.L1 && psOld.Btn.L1; }
+	bool Fall_L2() { return !ps.Btn.L2 && psOld.Btn.L2; }
+	bool Fall_L3() { return !ps.Btn.L3 && psOld.Btn.L3; }
+	bool Fall_R1() { return !ps.Btn.R1 && psOld.Btn.R1; }
+	bool Fall_R2() { return !ps.Btn.R2 && psOld.Btn.R2; }
+	bool Fall_R3() { return !ps.Btn.R3 && psOld.Btn.R3; }
+	bool Fall_Start() { return !ps.Btn.Start && psOld.Btn.Start; }
+	bool Fall_Select() { return !ps.Btn.Select && psOld.Btn.Select; }
+	bool Fall_Home() { return !ps.Btn.Home && psOld.Btn.Home; }
 
+	unsigned char Error() {	return error; }
 
+	void init(HardwareSerial hs);
+	unsigned char getData();
 };
 
 extern PsconClass Pscon;

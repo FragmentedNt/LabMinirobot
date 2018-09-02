@@ -15,6 +15,7 @@ class MotorDriverTA8428KClass
 	 byte pinA, pinB;
 	 bool inverse;
 	 bool brake;
+	 short prev_power;
  protected:
 
 

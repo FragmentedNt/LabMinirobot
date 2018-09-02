@@ -13,6 +13,11 @@ void MotorDriverTA8428KClass::init(byte pinA, byte pinB, bool brake = false, boo
 	pinMode(pinB, OUTPUT);
 	this->brake = brake;
 	this->inverse = inverse;
+	prev_power = 0;
+	analogWrite(pinA, 0);
+	analogWrite(pinB, 0);
+	delayMicroseconds(100);
+	set(0);
 }
 
 void MotorDriverTA8428KClass::set(short power)
@@ -20,6 +25,14 @@ void MotorDriverTA8428KClass::set(short power)
 	if (inverse)
 		power *= -1;
 	
+	if (prev_power != power)
+	{
+		prev_power = power;
+		analogWrite(pinA, 0);
+		analogWrite(pinB, 0);
+		delayMicroseconds(100);
+	}
+
 	if (power > 0)
 	{
 		if (power > 255)	power = 255;
@@ -47,6 +60,11 @@ void MotorDriverTA8428KClass::set(short power)
 	}
 }
 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="power"></param>
+/// <param name="brake"></param>
 void MotorDriverTA8428KClass::set(short power, byte brake)
 {
 	this->brake = brake;

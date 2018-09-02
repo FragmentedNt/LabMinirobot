@@ -58,16 +58,10 @@ void TM0Class::Delay(unsigned long ms)
 
 void TM0Class::DelayMicroseconds(unsigned int us)
 {
-	switch (mode)
-	{
-	case 0:
-		delayMicroseconds(us * factor0);
-		break;
-
-	case 1:
-		delayMicroseconds(us / factor1);
-		break;
-	}
+	if (us < 16383)
+		delayMicroseconds(us);
+	else
+		Delay(us / 1000);
 }
 
 unsigned long TM0Class::Millis()

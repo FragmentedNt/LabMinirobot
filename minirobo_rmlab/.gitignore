@@ -1,0 +1,15 @@
+# Add any directories, files, or patterns you don't want to be tracked by version control
+Thumbs.db
+.vs/
+packages/
+obj/
+Debug/
+Release/
+Trash/
+.DS_Store
+*Mat.txt
+.git.bfg-report/
+*.csv
+*.xlsx
+*.png
+*.jpg

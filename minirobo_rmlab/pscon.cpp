@@ -5,7 +5,6 @@
 #include "pscon.h"
 
 
-
 void PsconClass::init(HardwareSerial& hs)
 {
 	serial = &hs;

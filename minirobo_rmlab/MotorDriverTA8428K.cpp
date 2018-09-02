@@ -18,6 +18,10 @@ void MotorDriverTA8428KClass::init(byte pinA, byte pinB, bool brake = false, boo
 	analogWrite(pinB, 0);
 	delayMicroseconds(100);
 	set(0);
+	delay(10);
+	delayMicroseconds(10);
+	millis();
+	micros();
 }
 
 void MotorDriverTA8428KClass::set(short power)

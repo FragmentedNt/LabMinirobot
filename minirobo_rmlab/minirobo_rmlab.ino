@@ -9,30 +9,42 @@ void setup() {
 	TCCR0B = (TCCR0B & 0b11111000) | 0x01;
 	TCCR1B = (TCCR1B & 0b11111000) | 0x01;
 	TCCR2B = (TCCR2B & 0b11111000) | 0x01;
-	MD0.init(5, 6, true);
-	MD1.init(9, 10, true, true);
-	MD2.init(3, 11, true);
+	TM0.init();
+	MD0.init(5,  6, false);
+	MD1.init(9, 10, false, true);
+	MD2.init(3, 11, false);
 }
+
 
 void loop() {
   // put your main code here, to run repeatedly:
 	blinkLED();
 	Pscon.getData();
-	MD0.set(255 * Pscon.D_Left_Y());
-	MD1.set(255 * Pscon.D_Right_Y());
+	//Pscon.debug();
+	MD0.set(2 * Pscon.Left_Y());
+	MD1.set(2 * Pscon.Right_Y());
 	if (Pscon.R1())
 		MD2.set(100);
 	else if (Pscon.R2())
 		MD2.set(-100);
 	else
 		MD2.set(0);
+	TM0.Delay(9); 
+	printTimeSpan();
+}
 
+void printTimeSpan()
+{
+	static unsigned long prev_time = 0, current_time = 0;
+	current_time = TM0.Micros();
+	Serial.println(current_time - prev_time);
+	prev_time = TM0.Micros();
 }
 
 void blinkLED()
 {
 	static int ms = 0;
-	int mi = millis();
+	int mi = TM0.Millis();
 	if (mi - ms > 500)
 	{
 		ms = mi;

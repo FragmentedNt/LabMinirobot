@@ -16,12 +16,8 @@ void MotorDriverTA8428KClass::init(byte pinA, byte pinB, bool brake = false, boo
 	prev_power = 0;
 	analogWrite(pinA, 0);
 	analogWrite(pinB, 0);
-	delayMicroseconds(100);
+	TM0.DelayMicroseconds(100);
 	set(0);
-	delay(10);
-	delayMicroseconds(10);
-	millis();
-	micros();
 }
 
 void MotorDriverTA8428KClass::set(short power)
@@ -34,7 +30,7 @@ void MotorDriverTA8428KClass::set(short power)
 		prev_power = power;
 		analogWrite(pinA, 0);
 		analogWrite(pinB, 0);
-		delayMicroseconds(100);
+		TM0.DelayMicroseconds(100);
 	}
 
 	if (power > 0)

@@ -8,7 +8,7 @@
 void PsconClass::init(HardwareSerial& hs)
 {
 	serial = &hs;
-	serial->setTimeout(1);
+	serial->setTimeout(0);
 
 	memset(buf, 0x00, bufsize);
 	ps.Clear();
@@ -44,7 +44,11 @@ unsigned char PsconClass::getData()
 	if (!error)
 	{
 		if (++errorCount > errorCountThreshold)
+		{
 			error = 1;
+			ps.Clear();
+			psOld.Clear();
+		}
 	}
 	return error;
 }

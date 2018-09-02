@@ -9,6 +9,8 @@
 	#include "WProgram.h"
 #endif
 
+#include "TM0.h"
+
 class MotorDriverTA8428KClass
 {
  private:

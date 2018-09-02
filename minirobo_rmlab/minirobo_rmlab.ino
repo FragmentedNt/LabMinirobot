@@ -6,6 +6,9 @@ void setup() {
 	Serial.begin(115200);
 	Pscon.init(Serial);
 	pinMode(13, OUTPUT);
+	TCCR0B = (TCCR0B & 0b11111000) | 0x01;
+	TCCR1B = (TCCR1B & 0b11111000) | 0x01;
+	TCCR2B = (TCCR2B & 0b11111000) | 0x01;
 	MD0.init(5, 6, true);
 	MD1.init(9, 10, true, true);
 	MD2.init(3, 11, true);

@@ -31,6 +31,7 @@ void loop() {
 		MD2.set(0);
 	TM0.Delay(9); 
 	//printTimeSpan();
+	//demo();
 }
 
 void printTimeSpan()
@@ -50,5 +51,39 @@ void blinkLED()
 		ms = mi;
 		PINB |= _BV(5);	// Arduino nanoのPB5(D13番)に接続されているLEDを操作
 						// AVRの仕様でPINxに書き込むと出力が反転する(通常の出力レジスタはPORTx)
+	}
+}
+
+void demo()
+{
+	static int ms = 0;
+	int mi = TM0.Millis();
+	if (mi - ms < 2000)
+	{
+		MD0.set(0);
+		MD1.set(0);
+		MD2.set(0);
+	}
+	else if (mi - ms < 4000)
+	{
+		MD0.set(100);
+		MD1.set(100);
+		MD2.set(100);
+	}
+	else if (mi - ms < 6000)
+	{
+		MD0.set(0);
+		MD1.set(0);
+		MD2.set(0);
+	}
+	else if (mi - ms < 8000)
+	{
+		MD0.set(-100);
+		MD1.set(-100);
+		MD2.set(-100);
+	}
+	else
+	{
+		ms = mi;
 	}
 }

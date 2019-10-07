@@ -1,6 +1,8 @@
 #include "TM0.h"
 #include "MotorDriverTA8428K.h"
 #include "pscon.h"
+#include <math.h>
+
 void setup() {
   // put your setup code here, to run once:
 	Serial.begin(115200);
@@ -18,11 +20,20 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
+	float forward = 0, turn = 0; 
+
 	blinkLED();
 	Pscon.getData();
 	//Pscon.debug();
-	MD0.set(2 * Pscon.Left_Y());
-	MD1.set(2 * Pscon.Right_Y());
+	// MD0.set(2 * Pscon.Left_Y());
+	// MD1.set(2 * Pscon.Right_Y());
+	if(abs(Pscon.D_Left_Y()) > 0.3)
+		forward = Pscon.D_Left_Y();
+	if(abs(Pscon.D_Right_X()) > 0.3)
+		turn = Pscon.D_Right_X();
+	MD0.set(255 * forward + 50 * turn);
+	MD1.set(255 * forward - 50 * turn);
+
 	if (Pscon.R1())
 		MD2.set(100);
 	else if (Pscon.R2())

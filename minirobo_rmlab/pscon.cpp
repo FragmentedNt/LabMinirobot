@@ -29,7 +29,9 @@ unsigned char PsconClass::getData()
 			{
 				byte *b = &buf[readindex - packetSize + 1];
 				unsigned char chk = 0x00;
-				for (int i = 0; i < datasize; i++) chk ^= b[i];
+				for (int i = 0; i < datasize; i++) chk += b[i];
+				chk += 0x7c;
+				chk += 0x7c;
 				if (chk == b[datasize])
 				{
 					psOld = ps;

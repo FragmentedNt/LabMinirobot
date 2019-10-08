@@ -23,41 +23,57 @@ void loop() {
 	float forward = 0, turn = 0; 
 	static bool indivisualTwoWheel = false;
 
-	blinkLED();
-	Pscon.getData();
-	//Pscon.debug();
-
-	if(Pscon.Fall_L3())
-		indivisualTwoWheel = !indivisualTwoWheel;
-	if(Pscon.Fall_Select())
-		MD0.inversion();
-	if(Pscon.Fall_Start())
-		MD1.inversion();
-		
-	if(indivisualTwoWheel)
+	if(!Pscon.getData())
 	{
-		MD0.set(2 * Pscon.Left_Y());
-		MD1.set(2 * Pscon.Right_Y());
+		//Pscon.debug();
+
+		if(Pscon.Fall_L3())
+			indivisualTwoWheel = !indivisualTwoWheel;
+		if(Pscon.Fall_Select())
+			MD0.inversion();
+		if(Pscon.Fall_Start())
+			MD1.inversion();
+			
+		if(indivisualTwoWheel)
+		{
+			MD0.set(2 * Pscon.Left_Y());
+			MD1.set(2 * Pscon.Right_Y());
+		}
+		else
+		{
+			if(abs(Pscon.D_Left_Y()) > 0.3)
+				forward = Pscon.D_Left_Y();
+			if(abs(Pscon.D_Right_X()) > 0.3)
+				turn = Pscon.D_Right_X();
+			MD0.set(255 * forward + 255 * turn);
+			MD1.set(255 * forward - 255 * turn);
+		}
+		
+		if (Pscon.R1())
+			MD2.set(100);
+		else if (Pscon.R2())
+			MD2.set(-100);
+		else
+			MD2.set(0);
 	}
 	else
 	{
-		if(abs(Pscon.D_Left_Y()) > 0.3)
-			forward = Pscon.D_Left_Y();
-		if(abs(Pscon.D_Right_X()) > 0.3)
-			turn = Pscon.D_Right_X();
-		MD0.set(255 * forward + 255 * turn);
-		MD1.set(255 * forward - 255 * turn);
+		MD0.set(0);
+		MD1.set(0);
+		MD2.set(0);
 	}
 	
-	if (Pscon.R1())
-		MD2.set(100);
-	else if (Pscon.R2())
-		MD2.set(-100);
-	else
-		MD2.set(0);
-	TM0.Delay(9); 
+	
 	//printTimeSpan();
 	//demo();
+	
+	if(indivisualTwoWheel)
+		blinkLED(100);
+	else
+		blinkLED(500);
+	
+	TM0.Delay(20); 
+
 }
 
 void printTimeSpan()
@@ -68,11 +84,11 @@ void printTimeSpan()
 	prev_time = TM0.Micros();
 }
 
-void blinkLED()
+void blinkLED(unsigned long ts)
 {
-	static int ms = 0;
-	int mi = TM0.Millis();
-	if (mi - ms > 500)
+	static unsigned long ms = 0;
+	unsigned long mi = TM0.Millis();
+	if (mi - ms > ts)
 	{
 		ms = mi;
 		PINB |= _BV(5);	// Arduino nano‚ÌPB5(D13”Ô)‚ÉÚ‘±‚³‚ê‚Ä‚¢‚éLED‚ğ‘€ì

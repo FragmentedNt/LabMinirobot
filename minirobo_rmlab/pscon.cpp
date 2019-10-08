@@ -34,7 +34,7 @@ unsigned char PsconClass::getData()
 				chk += 0x7c;
 				if (chk == b[datasize])
 				{
-					psOld = ps;
+					memcpy(psOld.Packet, ps.Packet, packetSize);
 					memcpy(ps.Packet, b, packetSize);
 					clearError();
 					calculate();

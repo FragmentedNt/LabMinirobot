@@ -120,5 +120,11 @@ void MotorDriverTA8428KClass::set(short power, byte brake)
 	set(power);
 }
 
+void MotorDriverTA8428KClass::inversion()
+{
+	inverse = !inverse;
+}
+
+
 MotorDriverTA8428KClass MD0, MD1, MD2;
 

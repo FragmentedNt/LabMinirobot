@@ -21,19 +21,34 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
 	float forward = 0, turn = 0; 
+	static bool indivisualTwoWheel = false;
 
 	blinkLED();
 	Pscon.getData();
 	//Pscon.debug();
-	// MD0.set(2 * Pscon.Left_Y());
-	// MD1.set(2 * Pscon.Right_Y());
-	if(abs(Pscon.D_Left_Y()) > 0.3)
-		forward = Pscon.D_Left_Y();
-	if(abs(Pscon.D_Right_X()) > 0.3)
-		turn = Pscon.D_Right_X();
-	MD0.set(255 * forward + 50 * turn);
-	MD1.set(255 * forward - 50 * turn);
 
+	if(Pscon.Fall_L3())
+		indivisualTwoWheel = !indivisualTwoWheel;
+	if(Pscon.Fall_Select())
+		MD0.inversion();
+	if(Pscon.Fall_Start())
+		MD1.inversion();
+		
+	if(indivisualTwoWheel)
+	{
+		MD0.set(2 * Pscon.Left_Y());
+		MD1.set(2 * Pscon.Right_Y());
+	}
+	else
+	{
+		if(abs(Pscon.D_Left_Y()) > 0.3)
+			forward = Pscon.D_Left_Y();
+		if(abs(Pscon.D_Right_X()) > 0.3)
+			turn = Pscon.D_Right_X();
+		MD0.set(255 * forward + 255 * turn);
+		MD1.set(255 * forward - 255 * turn);
+	}
+	
 	if (Pscon.R1())
 		MD2.set(100);
 	else if (Pscon.R2())

@@ -26,6 +26,7 @@ class MotorDriverTA8428KClass
 	void init(byte pinA, byte pinB, bool brake = false, bool inverse = false, bool pwm_enable = true);
 	void set(short power);
 	void set(short power, byte brake);
+	void inversion();
 };
 
 extern MotorDriverTA8428KClass MD0, MD1, MD2;

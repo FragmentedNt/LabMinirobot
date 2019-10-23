@@ -8,10 +8,16 @@ void setup() {
 	Serial.begin(115200);
 	Pscon.init(Serial);
 	pinMode(13, OUTPUT);
+
+	// タイマ設定 PWM周波数変えるのに使用 https://arduinoinfo.mywikis.net/wiki/Arduino-PWM-Frequency
 	TCCR0B = (TCCR0B & 0b11111000) | 0x02;
 	TCCR1B = (TCCR1B & 0b11111000) | 0x02;
 	TCCR2B = (TCCR2B & 0b11111000) | 0x02;
+
+	// TCCRレジスタ弄っちゃうとTimer0の動作周波数が変わってmicros()とかmillis()とかが狂うのでそれをなんとなく補正する自作クラス
 	TM0.init();
+
+	// MDのピン配置
 	MD0.init(5,  6, true);
 	MD1.init(9, 10, true, true);
 	MD2.init(3, 11, true);

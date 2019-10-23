@@ -23,9 +23,14 @@ class MotorDriverTA8428KClass
 
 
  public:
+	// 初期化 pinA/BはHardwarePWMの使えるピンでなおかつ同じTimerを参照する組み合わせ推奨
 	void init(byte pinA, byte pinB, bool brake = false, bool inverse = false, bool pwm_enable = true);
+	
+	// -255～255の範囲で出力指定
 	void set(short power);
 	void set(short power, byte brake);
+
+	// init()以外でinverseにアクセスする方法が無かったので追加
 	void inversion();
 };
 

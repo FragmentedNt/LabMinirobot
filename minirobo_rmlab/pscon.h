@@ -74,6 +74,7 @@ class PsconClass
 
 
  public:
+	// ボタン状態取得
 	bool Up()		{ return ps.Btn.Up; }
 	bool Down()		{ return ps.Btn.Down; }
 	bool Right()	{ return ps.Btn.Right; }
@@ -96,11 +97,13 @@ class PsconClass
 	char Right_Y()	{ return ps.Btn.Right_Y - 128; }
 	char Right_X()	{ return ps.Btn.Right_X - 128; }
 	
+	// -1～1範囲でスティックのDuty
 	float D_Left_Y()	{ return (float)(ps.Btn.Left_Y  - 128) / 127; }
 	float D_Left_X()	{ return (float)(ps.Btn.Left_X  - 128) / 127; }
 	float D_Right_Y()	{ return (float)(ps.Btn.Right_Y - 128) / 127; }
 	float D_Right_X()	{ return (float)(ps.Btn.Right_X - 128) / 127; }
 
+	// ボタンのアップエッジ検出
 	bool Rise_Up()		{ return ps.Btn.Up && !psOld.Btn.Up; }
 	bool Rise_Down()	{ return ps.Btn.Down && !psOld.Btn.Down; }
 	bool Rise_Right()	{ return ps.Btn.Right && !psOld.Btn.Right; }
@@ -119,6 +122,7 @@ class PsconClass
 	bool Rise_Select()	{ return ps.Btn.Select && !psOld.Btn.Select; }
 	bool Rise_Home()	{ return ps.Btn.Home && !psOld.Btn.Home; }
 
+	// ボタンのダウンエッジ検出
 	bool Fall_Up()		{ return !ps.Btn.Up && psOld.Btn.Up; }
 	bool Fall_Down()	{ return !ps.Btn.Down && psOld.Btn.Down; }
 	bool Fall_Right()	{ return !ps.Btn.Right && psOld.Btn.Right; }
@@ -137,10 +141,16 @@ class PsconClass
 	bool Fall_Select()	{ return !ps.Btn.Select && psOld.Btn.Select; }
 	bool Fall_Home()	{ return !ps.Btn.Home && psOld.Btn.Home; }
 
+	// エラーフラグ 連続でerrorCountThresholdで指定した回数受信に失敗すると立つ
 	unsigned char Error() {	return error; }
 
+	// 初期化 これHardwareSerialだけじゃなくてSoftwareSerialのバージョンも作ればよかったな
 	void init(HardwareSerial& hs);
+
+	// データ取得 HardwareSerialからReadしてごちゃごちゃと処理する
 	unsigned char getData();
+
+	// デバッグ用
 	void rx2tx();
 	String toString();
 	size_t debug();
